@@ -53,7 +53,7 @@ impl eframe::App for MyApp {
                 ui.heading("entry3");
                 let entry3_files = list_all_files("entry3".to_string());
                 for file in entry3_files.unwrap().iter() {
-                    if ui.button("click me!").clicked() {
+                    if ui.button(get_file_name(file.to_path_buf())).clicked() {
                         Command::new("xdg-open")
                             .arg(file)
                             .spawn()
@@ -68,7 +68,7 @@ impl eframe::App for MyApp {
                 ui.heading("entry1");
                 let entry1_files = list_all_files("entry1".to_string());
                 for file in entry1_files.unwrap().iter() {
-                    if ui.button("click me!").clicked() {
+                    if ui.button(get_file_name(file.to_path_buf())).clicked() {
                         Command::new("xdg-open")
                             .arg(file)
                             .spawn()
@@ -81,7 +81,7 @@ impl eframe::App for MyApp {
             ui.heading("entry2");
             let entry2_files = list_all_files("entry2".to_string());
             for file in entry2_files.unwrap().iter() {
-                if ui.button("click me!").clicked() {
+                if ui.button(get_file_name(file.to_path_buf())).clicked() {
                     Command::new("xdg-open")
                         .arg(file)
                         .spawn()
@@ -106,4 +106,8 @@ fn list_all_files(entry: String) -> Result<Vec<PathBuf>, MyError> {
         }
         Err(_) => Err(MyError::new("something went wrong...")),
     }
+}
+
+fn get_file_name(path: PathBuf) -> String {
+    return path.file_name().unwrap().to_string_lossy().to_string();
 }
