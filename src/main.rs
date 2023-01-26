@@ -77,13 +77,10 @@ fn browse_dir(entry: Result<Vec<PathBuf>, MyError>, ui: &mut Ui, main_dir: &Stri
         if check_is_file(file.to_path_buf()) {
             make_button(file, ui);
         } else {
+            let subdir = main_dir.to_owned() + "/" + &get_file_name(file.to_path_buf()) + "/";
             let test = ui.collapsing(get_file_name(file.to_path_buf()), |_ui| {});
             if test.fully_open() {
-                browse_dir(
-                    list_all_files(main_dir.to_owned() + &get_file_name(file.to_path_buf())),
-                    ui,
-                    main_dir,
-                )
+                browse_dir(list_all_files(subdir.to_owned()), ui, &subdir)
             }
         }
     }
