@@ -38,27 +38,24 @@ fn main() {
     );
 }
 
+#[derive(Default)]
 struct MyApp {}
-
-impl Default for MyApp {
-    fn default() -> Self {
-        Self {}
-    }
-}
 
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::SidePanel::right("right_panel")
-            .exact_width(300.0)
+            .default_width(300.0)
             .show(ctx, |ui| {
+                ui.separator();
                 ui.heading("entry3");
                 let entry3_main = list_all_files("entry3".to_string());
                 browse_dir(entry3_main, ui, &"entry3/".to_string())
             });
 
         egui::SidePanel::left("left_panel")
-            .exact_width(250.0)
+            .default_width(250.0)
             .show(ctx, |ui| {
+                ui.separator();
                 ui.heading("entry1");
                 let entry1_main = list_all_files("entry1".to_string());
                 browse_dir(entry1_main, ui, &"entry1/".to_string())
