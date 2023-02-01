@@ -83,6 +83,7 @@ impl eframe::App for MyApp {
 
         egui::CentralPanel::default().show(ctx, |ui| {
             egui::ScrollArea::vertical().show(ui, |ui| {
+                ui.separator();
                 ui.heading(get_file_name(&parent_dir[2]));
                 let entry2_main = list_all_files(get_file_name(&parent_dir[2]), &self.dir);
                 browse_dir(entry2_main, ui, &get_file_name(&parent_dir[2]), &self.dir)
