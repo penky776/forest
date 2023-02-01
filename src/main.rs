@@ -62,25 +62,31 @@ impl eframe::App for MyApp {
         egui::SidePanel::right("right_panel")
             .default_width(300.0)
             .show(ctx, |ui| {
-                ui.separator();
-                ui.heading(get_file_name(&parent_dir[0]));
-                let entry3_main = list_all_files(get_file_name(&parent_dir[0]), &self.dir);
-                browse_dir(entry3_main, ui, &get_file_name(&parent_dir[0]), &self.dir)
+                egui::ScrollArea::vertical().show(ui, |ui| {
+                    ui.separator();
+                    ui.heading(get_file_name(&parent_dir[0]));
+                    let entry3_main = list_all_files(get_file_name(&parent_dir[0]), &self.dir);
+                    browse_dir(entry3_main, ui, &get_file_name(&parent_dir[0]), &self.dir)
+                });
             });
 
         egui::SidePanel::left("left_panel")
             .default_width(250.0)
             .show(ctx, |ui| {
-                ui.separator();
-                ui.heading(get_file_name(&parent_dir[1]));
-                let entry1_main = list_all_files(get_file_name(&parent_dir[1]), &self.dir);
-                browse_dir(entry1_main, ui, &get_file_name(&parent_dir[1]), &self.dir)
+                egui::ScrollArea::vertical().show(ui, |ui| {
+                    ui.separator();
+                    ui.heading(get_file_name(&parent_dir[1]));
+                    let entry1_main = list_all_files(get_file_name(&parent_dir[1]), &self.dir);
+                    browse_dir(entry1_main, ui, &get_file_name(&parent_dir[1]), &self.dir)
+                });
             });
 
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading(get_file_name(&parent_dir[2]));
-            let entry2_main = list_all_files(get_file_name(&parent_dir[2]), &self.dir);
-            browse_dir(entry2_main, ui, &get_file_name(&parent_dir[2]), &self.dir)
+            egui::ScrollArea::vertical().show(ui, |ui| {
+                ui.heading(get_file_name(&parent_dir[2]));
+                let entry2_main = list_all_files(get_file_name(&parent_dir[2]), &self.dir);
+                browse_dir(entry2_main, ui, &get_file_name(&parent_dir[2]), &self.dir)
+            });
         });
     }
 }
