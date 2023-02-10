@@ -98,20 +98,25 @@ fn browse_dir(
     main_dir: &String,
     parent_dir: &String,
 ) {
-    for file in entry.unwrap().iter() {
+    for (i, file) in entry.unwrap().iter().enumerate() {
         if check_is_file(file.to_path_buf()) {
             make_button(file, ui);
         } else {
             let subdir = main_dir.to_owned() + "/" + &get_file_name(&file.to_path_buf()) + "/";
-            let test = ui.collapsing(get_file_name(&file.to_path_buf()), |_ui| {});
-            if test.fully_open() {
-                browse_dir(
-                    list_all_files(subdir.to_owned(), parent_dir),
-                    ui,
-                    &subdir,
-                    parent_dir,
-                )
-            }
+
+            let id = ui.make_persistent_id(i);
+
+            ui.push_id(id, |ui| {
+                let collapser = ui.collapsing(get_file_name(&file.to_path_buf()), |_ui| {});
+                if collapser.fully_open() {
+                    browse_dir(
+                        list_all_files(subdir.to_owned(), parent_dir),
+                        ui,
+                        &subdir,
+                        parent_dir,
+                    )
+                }
+            });
         }
     }
 }
