@@ -1,29 +1,9 @@
+mod error;
+
 use eframe::egui;
 use egui::Ui;
-use std::fmt;
-use std::fs;
-use std::io;
-use std::path::PathBuf;
-use std::process::Command;
-
-#[derive(Debug)]
-struct MyError {
-    details: String,
-}
-
-impl MyError {
-    fn new(msg: &str) -> MyError {
-        MyError {
-            details: msg.to_string(),
-        }
-    }
-}
-
-impl fmt::Display for MyError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.details)
-    }
-}
+use error::ForestError;
+use std::{fs, io, path::PathBuf, process::Command};
 
 fn main() {
     // application
@@ -41,7 +21,7 @@ fn main() {
 
     let dir = match dir.trim().parse() {
         Ok(dir) => Ok(dir),
-        Err(_) => Err(MyError::new("Couldn't parse input")),
+        Err(_) => Err(ForestError::UnableToParse),
     };
 
     eframe::run_native(
@@ -93,7 +73,7 @@ impl eframe::App for MyApp {
 }
 
 fn browse_dir(
-    entry: Result<Vec<PathBuf>, MyError>,
+    entry: Result<Vec<PathBuf>, ForestError>,
     ui: &mut Ui,
     main_dir: &String,
     parent_dir: &String,
@@ -131,7 +111,7 @@ fn make_button(file: &PathBuf, ui: &mut Ui) {
 }
 
 // get three folders from parent directory
-fn list_three_folders(parent_dir: &String) -> Result<Vec<PathBuf>, MyError> {
+fn list_three_folders(parent_dir: &String) -> Result<Vec<PathBuf>, ForestError> {
     let mut folders = Vec::with_capacity(3); // limit of THREE folders.
     let entries = fs::read_dir(parent_dir);
 
@@ -150,11 +130,11 @@ fn list_three_folders(parent_dir: &String) -> Result<Vec<PathBuf>, MyError> {
             }
             return Ok(folders);
         }
-        Err(_) => Err(MyError::new("something went wrong...")),
+        Err(_) => Err(ForestError::FailedToReadDir),
     }
 }
 
-fn list_all_files(entry: String, parent_dir: &String) -> Result<Vec<PathBuf>, MyError> {
+fn list_all_files(entry: String, parent_dir: &String) -> Result<Vec<PathBuf>, ForestError> {
     let mut files = Vec::with_capacity(200); // limit of 200 files/folders in each directory
     let entries = fs::read_dir(parent_dir.to_owned() + &entry);
 
@@ -167,7 +147,7 @@ fn list_all_files(entry: String, parent_dir: &String) -> Result<Vec<PathBuf>, My
             }
             return Ok(files);
         }
-        Err(_) => Err(MyError::new("something went wrong...")),
+        Err(_) => Err(ForestError::FailedToReadDir),
     }
 }
 
